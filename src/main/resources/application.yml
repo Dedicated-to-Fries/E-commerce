@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecommerce?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  rabbitmq:
+    host:127.0.0.1
+    port:5672
+    username:guest
+    password:guest
+
+# 为minio设置URl，配置minio中创建的Bucket
+app:
+  minio:
+    # 访问资源的 URL
+    base-url: "http://172.20.241.13:9000/"
+    # API 端点
+    endpoint: "http://172.20.241.13:9000/"
+    # minio创建的Bucket
+    bucket: images
+    # Access Key
+    access-key: voq3MLujXpBiBoqcUc8C
+    # Secret Key
+    secret-key: iKzs2l93VwGeoah5q9yaKTPz427EfW9Au2zmCZ9S
+
+# 为生成JWT声明加密算法和秘钥
+security:
+  jwt:
+    secretKey: whatever
+
+
+

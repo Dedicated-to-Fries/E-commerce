@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.ecommerce.dao.OrderDao">
+
+
+    <resultMap id="userMap" type="com.example.ecommerce.entity.UserEntity">
+        <id column="user_id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="sex" property="sex"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="createdAt" property="createdAt"/>
+        <!-- 一对多的关系。使用collection标签
+           * property：指定集合属性的名（User实体类中list集合名）
+           * ofType：指的是集合中元素的值，一般是类的完全限定名
+        -->
+        <collection property="ordersList" ofType="com.example.ecommerce.entity.Order">
+            <!-- 封装order的数据-->
+            <id property="id" column="order_id"/><!-- 查询语句中的查到的id值：order_id应与java对象的id所对应-->
+            <result property="userId" column="userId" />
+            <result property="number" column="number" />
+            <result property="price" column="price" />
+            <result property="paymentMethods" column="paymentMethods" />
+            <result property="shippingMethods" column="shippingMethods" />
+        </collection>
+    </resultMap>
+
+    <!--使用嵌套查询(多表连接查询)多个订单信息，用户信息也要返回 -->
+    <select id="oneToManyByUser" resultMap="userMap">
+        select * ,
+               o.id as order_id,
+               u.id as user_id
+        FROM
+            orders o ,
+            user u
+        WHERE o.user_id = u.id
+          AND u.id=#{id}
+    </select>
+
+
+    <insert id="addOrder" parameterType="com.example.ecommerce.entity.Order" useGeneratedKeys="true" keyProperty="id">
+          insert into orders (user_id,number,price,paymentMethods,shippingMethods) values (#{userId},#{number},#{price},#{paymentMethods},#{shippingMethods})
+    </insert>
+
+
+
+</mapper>

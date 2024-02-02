@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ecommerce.dao.CommodityDao">
+    <!-- java对象的属性要对应数据库类型，其中property为指定Java对象中的属性名，column属性用于指定查询结果集中的列名，详细参照java类型与数据库类型表 -->
+    <resultMap type="com.example.ecommerce.entity.Commodity" id="CommodityMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="sales" column="sales" jdbcType="VARCHAR"/>
+        <result property="ordering" column="ordering" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="VARCHAR"/>
+        <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+
+
+    <insert id="addCommodity" parameterType="com.example.ecommerce.entity.Commodity" useGeneratedKeys="true" keyProperty="id">
+         insert into commodity (name,type,sales,ordering,status,url,createdAt) values (#{name},#{type},#{sales},#{ordering},#{status},#{url},#{createdAt})
+    </insert>
+
+    <delete id="deleteById"  parameterType="com.example.ecommerce.entity.Commodity">
+        delete from commodity where id=#{id}
+    </delete>
+
+    <update  id="update"  parameterType="com.example.ecommerce.entity.Commodity">
+        update commodity set name=#{name},type=#{type},sales=#{sales},ordering=#{ordering},status=#{status},createdAt=#{createdAt} where id=#{id}
+    </update>
+
+
+    <!--Mybatis的动态查询:假如前端用户不输入任何关键字查询，可以防止报错-->
+    <select id="findByNameAndDate"  resultType="com.example.ecommerce.entity.Commodity" parameterType="com.example.ecommerce.entity.Commodity" resultMap="CommodityMap" >
+        select * from commodity
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <!-- 当开始时间为空时，那么查询的数据将是截止结束时间创建的全部商品 -->
+            <if test="startTime != null">
+                and createdAt >= #{startTime}
+            </if>
+            <!-- 当结束时间为空时，那么查询的数据将是当前时间开始创建的全部商品 -->
+            <if test="endTime != null">
+                and createdAt &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>
