@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @Title: Commodity
@@ -33,6 +33,6 @@ public class Commodity implements Serializable {
 
     private String url;//图片访问路径
 
-    private  Date createdAt=new Date();//商品创建日期
+    private LocalDateTime createdAt=LocalDateTime.now();//商品创建日期
 
 }

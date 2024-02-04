@@ -13,7 +13,10 @@
     </resultMap>
 
     <select id="login" parameterType="com.example.ecommerce.entity.UserEntity" resultType="com.example.ecommerce.entity.UserEntity">
-        select * from user where username =#{username} AND password=#{password}
+        select id, username, password, sex, province, city, createdAt
+        from user
+        where username = #{username}
+          AND password = #{password}
     </select>
 
     <insert id="register" parameterType="com.example.ecommerce.entity.UserEntity" useGeneratedKeys="true" keyProperty="id">

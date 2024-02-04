@@ -38,10 +38,11 @@
             <artifactId>minio</artifactId>
             <version>8.2.1</version>
         </dependency>
+        <!-- MyBatis 生成器 -->
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.4.6</version>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

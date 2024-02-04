@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -32,8 +32,9 @@ public class UserEntity implements Serializable{
 
     private  String  city;//用户所属城市
 
-    private  Date createdAt=new Date();//用户创建时间
+    private LocalDateTime createdAt=LocalDateTime.now();//用户创建时间
 
     private List<Order>  ordersList;
+
 
 }

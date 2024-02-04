@@ -30,7 +30,7 @@
 
     <!--Mybatis的动态查询:假如前端用户不输入任何关键字查询，可以防止报错-->
     <select id="findByNameAndDate"  resultType="com.example.ecommerce.entity.Commodity" parameterType="com.example.ecommerce.entity.Commodity" resultMap="CommodityMap" >
-        select * from commodity
+        select id, name, type, sales, ordering, status, url, createdAt from ecommerce.commodity
         <where>
             <if test="name != null and name != ''">
                 and name like concat('%',#{name},'%')

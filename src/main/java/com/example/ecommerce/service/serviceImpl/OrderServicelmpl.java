@@ -4,8 +4,7 @@ import com.example.ecommerce.dao.OrderDao;
 import com.example.ecommerce.entity.Order;
 import com.example.ecommerce.entity.UserEntity;
 import com.example.ecommerce.service.OrderService;
-import com.example.ecommerce.utils.MybatisUtils;
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,23 +18,17 @@ import java.util.List;
 @Service
 public class OrderServicelmpl implements OrderService {
 
+    @Autowired
+    private OrderDao orderDao;
 
     @Override
     public void addOrder(Order order) {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        OrderDao mapper = sqlSession.getMapper(OrderDao.class);
-        mapper.addOrder(order);
-        sqlSession.commit();
-        sqlSession.close();
+        orderDao.addOrder(order);
     }
 
     @Override
     public List<UserEntity> oneToManyByUser(int userId) {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        OrderDao mapper = sqlSession.getMapper(OrderDao.class);
-        List<UserEntity> users = mapper.oneToManyByUser(userId);
-        sqlSession.commit();
-        sqlSession.close();
+        List<UserEntity> users = orderDao.oneToManyByUser(userId);
         return users;
     }
 }

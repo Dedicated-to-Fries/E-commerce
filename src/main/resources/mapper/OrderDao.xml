@@ -29,14 +29,25 @@
 
     <!--使用嵌套查询(多表连接查询)多个订单信息，用户信息也要返回 -->
     <select id="oneToManyByUser" resultMap="userMap">
-        select * ,
+        select o.id,
+               user_id,
+               number,
+               price,
+               paymentMethods,
+               shippingMethods,
+               u.id,
+               username,
+               password,
+               sex,
+               province,
+               city,
+               createdAt,
                o.id as order_id,
                u.id as user_id
-        FROM
-            orders o ,
-            user u
+        FROM orders o,
+             user u
         WHERE o.user_id = u.id
-          AND u.id=#{id}
+          AND u.id = #{id}
     </select>
 
 

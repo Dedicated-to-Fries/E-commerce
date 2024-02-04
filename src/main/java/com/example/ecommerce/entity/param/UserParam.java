@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -42,10 +42,8 @@ public class UserParam implements Serializable {
     @NotBlank
     private  String  city;//用户所属城市
 
-    private Date createdAt=new Date();//用户创建时间
+    private LocalDateTime createdAt=LocalDateTime.now();//用户创建时间
 
     private List<Order> ordersList;
-
-
 
 }

@@ -3,8 +3,7 @@ package com.example.ecommerce.service.serviceImpl;
 import com.example.ecommerce.dao.CommodityDao;
 import com.example.ecommerce.entity.Commodity;
 import com.example.ecommerce.service.CommodityService;
-import com.example.ecommerce.utils.MybatisUtils;
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,41 +17,27 @@ import java.util.List;
 @Service
 public class CommodityServiceImpl implements CommodityService {
 
+    @Autowired
+    private CommodityDao commodityDao;
 
     @Override
     public List<Commodity> findByNameAndDate(String name, String startTime, String endTime) {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        CommodityDao mapper = sqlSession.getMapper(CommodityDao.class);
-        List<Commodity> byNameAndDate=mapper.findByNameAndDate(name,startTime,endTime);
-        sqlSession.commit();
-        sqlSession.close();//关闭事务连接，持久化才能有效
+        List<Commodity> byNameAndDate=commodityDao.findByNameAndDate(name,startTime,endTime);
         return byNameAndDate;
     }
 
     @Override
     public void addCommodity(Commodity commodity) {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        CommodityDao mapper = sqlSession.getMapper(CommodityDao.class);
-        mapper.addCommodity(commodity);
-        sqlSession.commit();
-        sqlSession.close();
+        commodityDao.addCommodity(commodity);
     }
 
     @Override
     public void update(Commodity commodity) {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        CommodityDao mapper = sqlSession.getMapper(CommodityDao.class);
-        mapper.update(commodity);
-        sqlSession.commit();
-        sqlSession.close();
+        commodityDao.update(commodity);
     }
 
     @Override
     public void deleteById(Integer id) {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        CommodityDao mapper = sqlSession.getMapper(CommodityDao.class);
-        mapper.deleteById(id);
-        sqlSession.commit();
-        sqlSession.close();
+        commodityDao.deleteById(id);
     }
 }

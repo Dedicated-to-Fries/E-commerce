@@ -9,8 +9,6 @@ import com.example.ecommerce.exception.ApiException;
 import com.example.ecommerce.security.JwtManager;
 import com.example.ecommerce.security.plugin.UserDetail;
 import com.example.ecommerce.service.UserService;
-import com.example.ecommerce.utils.MybatisUtils;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,6 +27,8 @@ import java.util.Collections;
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
 
+    @Autowired
+    private UserDao userDao;
 
     @Autowired
     private JwtManager jwtManager;
@@ -37,8 +37,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     //当用户登录时会生成一个JWT令牌
     @Override
     public UserVO login(LoginParam userParam) {
-        SqlSession sqlSession =MybatisUtils.getSqlSession();
-        UserDao userDao= sqlSession.getMapper(UserDao.class);
         //根据用户名查找出用户实体
         UserEntity user=userDao.findByName(userParam.getUsername());
 
@@ -57,9 +55,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public void register(UserParam user) {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        UserDao mapper = sqlSession.getMapper(UserDao.class);
-        UserEntity byName = mapper.findByName(user.getUsername());//根据前端输入的用户名和数据库进行对比
+        UserEntity byName = userDao.findByName(user.getUsername());//根据前端输入的用户名和数据库进行对比
         if(byName !=null){//判断返回的List集合是否为空
            throw new ApiException("用户名已存在，无法注册");//判断用户名是否存在，如果存在则抛出异常.
         }
@@ -72,32 +68,22 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         users.setProvince(user.getProvince());
         users.setCreatedAt(user.getCreatedAt());
         users.setOrdersList(user.getOrdersList());
-        mapper.register(users);
-        sqlSession.commit();
-        sqlSession.close();
+        userDao.register(users);
     }
 
     @Override
     public UserEntity findByName(String username){
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        UserDao mapper = sqlSession.getMapper(UserDao.class);
-        UserEntity byName = mapper.findByName(username);
-        sqlSession.commit();
-        sqlSession.close();
+        UserEntity byName = userDao.findByName(username);
         return byName;
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        UserDao mapper = sqlSession.getMapper(UserDao.class);
-        UserEntity userEntity = mapper.findByName(username);
+        UserEntity userEntity = userDao.findByName(username);
         if(userEntity == null){
             throw new UsernameNotFoundException("没有找到该用户");
         }
-        sqlSession.commit();
-        sqlSession.close();
         return new UserDetail(userEntity,Collections.emptyList());
     }
 }
